@@ -13,5 +13,3 @@ program
   .action((filepath1, filepath2) => genDiff(filepath1, filepath2));
 
 program.parse();
-// const options = program.opts();
-// if (options.type) console.log(`- ${options.type}`);
