@@ -1,12 +1,9 @@
-import * as fs from 'fs';
-import path from 'path';
 import _ from 'lodash';
+import customParse from './parsers.js';
 
 const genDiff = (path1, path2) => {
-  const firstFile = path.resolve(path1);
-  const secondFile = path.resolve(path2);
-  const file1 = JSON.parse(fs.readFileSync(firstFile));
-  const file2 = JSON.parse(fs.readFileSync(secondFile));
+  const file1 = customParse(path1);
+  const file2 = customParse(path2);
   const keys = _.sortBy(_.union(_.keys(file1), _.keys(file2)));
   const result = keys.reduce((acc, key) => {
     if (_.has(file1, key) && _.has(file2, key)) {
