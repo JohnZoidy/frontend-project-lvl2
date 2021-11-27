@@ -1,5 +1,0 @@
-{
-  - host: JohnZoidy.io
-  - timein: 20
-  - verbose: false
-}
