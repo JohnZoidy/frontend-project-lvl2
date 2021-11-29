@@ -3,21 +3,30 @@ import * as fs from 'fs';
 import { fileURLToPath } from 'url';
 import path, { dirname } from 'path';
 import genDiff from '../src/core.js';
-import stylish from '../src/formatters.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const getFileData = (filename) => fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
 
-const jsonData1 = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'));
-const ymlData1 = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'));
-const resultData1 = getFileData(getFixturePath('1 and 2.txt'));
+const jsonDataStylish = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'), 'stylish');
+const ymlDataStylish = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'stylish');
+const jsonDataPlain = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'), 'plain');
+const ymlDataPlain = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'plain');
+const failFormatter = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'test');
+const resultDataStylish = getFileData(getFixturePath('1-2stylish.txt'));
+const resultDataPlain = getFileData(getFixturePath('1-2plain.txt'));
 
 test('JSON test', () => {
-  expect(stylish(jsonData1)).toEqual(resultData1);
+  expect((jsonDataStylish)).toEqual(resultDataStylish);
+  expect((jsonDataPlain)).toEqual(resultDataPlain);
 });
 
 test('YAML test', () => {
-  expect(stylish(ymlData1)).toEqual(resultData1);
+  expect((ymlDataStylish)).toEqual(resultDataStylish);
+  expect((ymlDataPlain)).toEqual(resultDataPlain);
+});
+
+test('Formatter test', () => {
+  expect((failFormatter)).toEqual('there is no such formatter');
 });
