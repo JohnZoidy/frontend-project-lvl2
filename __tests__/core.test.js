@@ -16,15 +16,19 @@ const ymlDataPlain = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.
 const failFormatter = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'test');
 const resultDataStylish = getFileData(getFixturePath('1-2stylish.txt'));
 const resultDataPlain = getFileData(getFixturePath('1-2plain.txt'));
+const jsonDataJson = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'), 'json');
+const ymlDataJson = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'stylish');
 
-test('JSON test', () => {
+test('JSON file test', () => {
   expect((jsonDataStylish)).toEqual(resultDataStylish);
   expect((jsonDataPlain)).toEqual(resultDataPlain);
+  expect((typeof JSON.stringify(jsonDataJson))).toBe('string');
 });
 
-test('YAML test', () => {
+test('YAML file test', () => {
   expect((ymlDataStylish)).toEqual(resultDataStylish);
   expect((ymlDataPlain)).toEqual(resultDataPlain);
+  expect((typeof JSON.stringify(ymlDataJson))).toBe('string');
 });
 
 test('Formatter test', () => {

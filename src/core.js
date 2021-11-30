@@ -2,6 +2,7 @@ import _ from 'lodash';
 import customParse from './parsers.js';
 import stylish from '../formatters/stylish.js';
 import plain from '../formatters/plain.js';
+import makeJson from '../formatters/json.js';
 
 const isObject = (object) => typeof object === 'object' && object !== null;
 
@@ -43,6 +44,11 @@ const genDiff = (path1, path2, formatName) => {
     case 'plain': {
       const result = plain(data);
       console.log(result);
+      return result;
+    }
+    case 'json': {
+      const result = makeJson(data);
+      console.log(JSON.stringify(result, null, ''));
       return result;
     }
     default: {

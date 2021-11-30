@@ -3,6 +3,12 @@ const cut = (element) => element.substring(4, element.length);
 const stylish = (dataIn, replacer = '  ', spacesCount = 1) => {
   const iter = (data, depth) => {
     const ifObject = (value) => {
+      if (value === null) {
+        return 'null';
+      }
+      if (typeof value === 'string') {
+        return value;
+      }
       if (typeof value === 'object' && !Array.isArray(value)) {
         return `${iter(value, depth + 1)}`;
       }
@@ -16,7 +22,7 @@ const stylish = (dataIn, replacer = '  ', spacesCount = 1) => {
         return `\n${currenReplacer}- ${cut(key)}: ${ifObject(value)}`;
       }
       if (key.includes('upd.')) {
-        return `\n${currenReplacer}- ${cut(key)}: ${ifObject(value[0])}\n${currenReplacer}+ ${cut(key)}: ${value[1]}`;
+        return `\n${currenReplacer}- ${cut(key)}: ${ifObject(value[0])}\n${currenReplacer}+ ${cut(key)}: ${ifObject(value[1])}`;
       }
       return `\n${currenReplacer}  ${key}: ${ifObject(value)}`;
     };
