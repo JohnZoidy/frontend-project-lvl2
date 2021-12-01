@@ -9,22 +9,17 @@ const makeDiffObject = (obj1, obj2) => {
   const result = keys.reduce((acc, key) => {
     if (_.has(obj1, key) && _.has(obj2, key)) {
       if (_.isEqual(obj1[key], obj2[key])) {
-        acc[`${key}`] = obj2[key];
-        return acc;
+        return { ...acc, [key]: obj2[key] };
       }
       if (isObject(obj1[key]) && isObject(obj2[key])) {
-        acc[`${key}`] = makeDiffObject(obj1[key], obj2[key]);
-        return acc;
+        return { ...acc, [key]: makeDiffObject(obj1[key], obj2[key]) };
       }
-      acc[`upd.${key}`] = [obj1[key], obj2[key]]; // from .. to ..
-      return acc;
+      return { ...acc, [`upd.${key}`]: [obj1[key], obj2[key]] };
     }
     if (!_.has(obj1, key) && _.has(obj2, key)) {
-      acc[`add.${key}`] = obj2[key];
-      return acc;
+      return { ...acc, [`add.${key}`]: obj2[key] };
     }
-    acc[`rem.${key}`] = obj1[key];
-    return acc;
+    return { ...acc, [`rem.${key}`]: obj1[key] };
   }, {});
   return result;
 };
