@@ -48,7 +48,7 @@ const genDiff = (path1, path2, formatName) => {
     }
     case 'json': {
       const result = makeJson(data);
-      console.log(JSON.stringify(result, null, ''));
+      console.log(JSON.stringify(result));
       return result;
     }
     default: {

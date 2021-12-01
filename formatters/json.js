@@ -14,7 +14,7 @@ const makeJson = (dataIn) => {
       }
       return old ? { oldValue: value } : { value };
     };
-    const ifRootObject = (key, value) => {
+    const ifModifiedObject = (key, value) => {
       if (typeof value === 'object' && !Array.isArray(value)) {
         return {
           name: key, value: 'nested', status: 'modified', children: iter(value),
@@ -40,7 +40,7 @@ const makeJson = (dataIn) => {
           name: cut(key), ...insertValue(value[1]), status: 'updated', ...insertValue(value[0], true),
         };
       }
-      return ifRootObject(key, value);
+      return ifModifiedObject(key, value);
     };
 
     const pairs = Object.entries(data);

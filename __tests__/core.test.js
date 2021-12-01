@@ -9,28 +9,31 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const getFileData = (filename) => fs.readFileSync(filename, { encoding: 'utf8', flag: 'r' });
 
-const jsonDataStylish = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'), 'stylish');
-const ymlDataStylish = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'stylish');
-const jsonDataPlain = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'), 'plain');
-const ymlDataPlain = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'plain');
-const failFormatter = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'test');
-const resultDataStylish = getFileData(getFixturePath('1-2stylish.txt'));
-const resultDataPlain = getFileData(getFixturePath('1-2plain.txt'));
-const jsonDataJson = genDiff(getFixturePath('file1.JSON'), getFixturePath('file2.json'), 'json');
-const ymlDataJson = genDiff(getFixturePath('file1.YML'), getFixturePath('file2.yaml'), 'stylish');
+const gendiffData = (filename1, filename2, formatter) => {
+  const result = genDiff(getFixturePath(filename1), getFixturePath(filename2), formatter);
+  return formatter === 'json' ? JSON.stringify(result) : result;
+};
 
-test('JSON file test', () => {
-  expect((jsonDataStylish)).toEqual(resultDataStylish);
-  expect((jsonDataPlain)).toEqual(resultDataPlain);
-  expect((typeof JSON.stringify(jsonDataJson))).toBe('string');
-});
+const getResultData = (formatter) => {
+  switch (formatter) {
+    case 'stylish': {
+      return getFileData(getFixturePath('1-2stylish.txt'));
+    }
+    case 'plain': {
+      return getFileData(getFixturePath('1-2plain.txt'));
+    }
+    case 'json': {
+      return getFileData(getFixturePath('1-2json.txt'));
+    }
+    default: {
+      return 'there is no such formatter';
+    }
+  }
+};
 
-test('YAML file test', () => {
-  expect((ymlDataStylish)).toEqual(resultDataStylish);
-  expect((ymlDataPlain)).toEqual(resultDataPlain);
-  expect((typeof JSON.stringify(ymlDataJson))).toBe('string');
-});
+const formatters = ['stylish', 'plain', 'test', 'json'];
 
-test('Formatter test', () => {
-  expect((failFormatter)).toEqual('there is no such formatter');
+test('Main test', () => {
+  formatters.map((formatter) => expect((gendiffData('file1.JSON', 'file2.json', formatter))).toEqual(getResultData(formatter)));
+  formatters.map((formatter) => expect((gendiffData('file1.YML', 'file2.yaml', formatter))).toEqual(getResultData(formatter)));
 });

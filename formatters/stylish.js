@@ -2,7 +2,7 @@ const cut = (element) => element.substring(4, element.length);
 
 const stylish = (dataIn, replacer = '  ', spacesCount = 1) => {
   const iter = (data, depth) => {
-    const ifObject = (value) => {
+    const insertValue = (value) => {
       if (value === null) {
         return 'null';
       }
@@ -16,15 +16,15 @@ const stylish = (dataIn, replacer = '  ', spacesCount = 1) => {
     };
     const format = ([key, value], currenReplacer) => {
       if (key.includes('add.')) {
-        return `\n${currenReplacer}+ ${cut(key)}: ${ifObject(value)}`;
+        return `\n${currenReplacer}+ ${cut(key)}: ${insertValue(value)}`;
       }
       if (key.includes('rem.')) {
-        return `\n${currenReplacer}- ${cut(key)}: ${ifObject(value)}`;
+        return `\n${currenReplacer}- ${cut(key)}: ${insertValue(value)}`;
       }
       if (key.includes('upd.')) {
-        return `\n${currenReplacer}- ${cut(key)}: ${ifObject(value[0])}\n${currenReplacer}+ ${cut(key)}: ${ifObject(value[1])}`;
+        return `\n${currenReplacer}- ${cut(key)}: ${insertValue(value[0])}\n${currenReplacer}+ ${cut(key)}: ${insertValue(value[1])}`;
       }
-      return `\n${currenReplacer}  ${key}: ${ifObject(value)}`;
+      return `\n${currenReplacer}  ${key}: ${insertValue(value)}`;
     };
 
     const pairs = Object.entries(data);
