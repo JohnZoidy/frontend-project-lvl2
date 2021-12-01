@@ -47,7 +47,7 @@ const makeJson = (dataIn) => {
     const result = pairs.reduce((acc, [key, value]) => [...acc, format([key, value])], []);
     return result;
   };
-  return iter(dataIn);
+  return JSON.stringify(iter(dataIn));
 };
 
 export default makeJson;

@@ -16,7 +16,7 @@ const pickFormatter = (data, formatName) => {
     }
     case 'json': {
       const result = makeJson(data);
-      console.log(JSON.stringify(result));
+      console.log(result);
       return result;
     }
     default: {
