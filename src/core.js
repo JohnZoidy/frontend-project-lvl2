@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import customParse from './parsers.js';
-import stylish from '../formatters/stylish.js';
-import plain from '../formatters/plain.js';
-import makeJson from '../formatters/json.js';
+import pickFormatter from '../formatters/index.js';
 
 const isObject = (object) => typeof object === 'object' && object !== null;
 
@@ -31,31 +29,11 @@ const makeDiffObject = (obj1, obj2) => {
   return result;
 };
 
-const genDiff = (path1, path2, formatName) => {
+const genDiff = (path1, path2, formatName = 'stylish') => {
   const firstObject = customParse(path1);
   const secondObject = customParse(path2);
   const data = makeDiffObject(firstObject, secondObject);
-  switch (formatName) {
-    case 'stylish': {
-      const result = stylish(data);
-      console.log(result);
-      return result;
-    }
-    case 'plain': {
-      const result = plain(data);
-      console.log(result);
-      return result;
-    }
-    case 'json': {
-      const result = makeJson(data);
-      console.log(JSON.stringify(result));
-      return result;
-    }
-    default: {
-      console.log('there is no such formatter');
-      return 'there is no such formatter';
-    }
-  }
+  return pickFormatter(data, formatName);
 };
 
 export default genDiff;
