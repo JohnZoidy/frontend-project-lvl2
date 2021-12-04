@@ -4,7 +4,7 @@
   "description": "[![Actions Status](https://github.com/JohnZoidy/frontend-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/JohnZoidy/frontend-project-lvl2/actions)",
   "main": "src/core.js",
   "scripts": {
-    "test": "npx jest --bail"
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest"
   },
   "bin": {
     "gendiff": "bin/gendiff.js"
