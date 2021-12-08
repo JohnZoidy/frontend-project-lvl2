@@ -26,14 +26,19 @@ const getResultData = (formatter) => {
       return getFileData(getFixturePath('1-2json.txt'));
     }
     default: {
-      return 'there is no such formatter';
+      throw new Error('Error: there is no such formatter');
     }
   }
 };
 
-const formatters = ['stylish', 'plain', 'test', 'json'];
+const formatters = ['stylish', 'plain', 'json'];
 
 test('Main test', () => {
   formatters.map((formatter) => expect((getTestData('file1.JSON', 'file2.json', formatter))).toEqual(getResultData(formatter)));
   formatters.map((formatter) => expect((getTestData('file1.YML', 'file2.yaml', formatter))).toEqual(getResultData(formatter)));
+});
+
+test('Throw test', () => {
+  expect(() => getTestData('file1.JSON', 'file2.json', 'test')).toThrow('Error: there is no such formatter');
+  expect(() => getTestData('file1.JSON', 'file2.txt')).toThrow('Error: unsupported format of file');
 });

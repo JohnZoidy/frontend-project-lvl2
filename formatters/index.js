@@ -20,8 +20,7 @@ const pickFormatter = (data, formatName) => {
       return result;
     }
     default: {
-      console.log('there is no such formatter');
-      return 'there is no such formatter';
+      throw new Error('Error: there is no such formatter');
     }
   }
 };

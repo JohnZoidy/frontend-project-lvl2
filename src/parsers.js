@@ -8,7 +8,10 @@ const customParse = (filepath) => {
   if (format === '.yml' || format === '.yaml') {
     return yaml.load(fs.readFileSync(fullPath, 'utf8'));
   }
-  return JSON.parse(fs.readFileSync(fullPath));
+  if (format === '.json') {
+    return JSON.parse(fs.readFileSync(fullPath));
+  }
+  throw new Error('Error: unsupported format of file');
 };
 
 export default customParse;
