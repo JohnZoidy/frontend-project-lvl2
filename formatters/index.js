@@ -2,8 +2,8 @@ import stylish from './stylish.js';
 import plain from './plain.js';
 import makeJson from './json.js';
 
-const pickFormatter = (data, formatName) => {
-  switch (formatName) {
+const pickFormatter = (data, formatterName) => {
+  switch (formatterName) {
     case 'stylish': {
       const result = stylish(data);
       console.log(result);

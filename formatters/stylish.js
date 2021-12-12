@@ -1,35 +1,34 @@
-const cut = (element) => element.substring(4, element.length);
-
 const stylish = (dataIn, replacer = '  ', spacesCount = 1) => {
   const iter = (data, depth) => {
-    const insertValue = (value) => {
+    const insertValue = (value, element) => {
       if (value === null) {
         return 'null';
       }
-      if (typeof value === 'string') {
-        return value;
+      if (value === 'nested') {
+        return `${iter(element.children, depth + 1)}`;
       }
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        return `${iter(value, depth + 1)}`;
-      }
-      return value;
+      return `${value}`;
     };
-    const format = ([key, value], currenReplacer) => {
-      if (key.includes('add.')) {
-        return `\n${currenReplacer}+ ${cut(key)}: ${insertValue(value)}`;
+    const format = (element, currenReplacer) => {
+      if (element.status === 'added') {
+        return `\n${currenReplacer}+ ${element.name}: ${insertValue(element.value, element)}`;
       }
-      if (key.includes('rem.')) {
-        return `\n${currenReplacer}- ${cut(key)}: ${insertValue(value)}`;
+      if (element.status === 'removed') {
+        return `\n${currenReplacer}- ${element.name}: ${insertValue(element.value, element)}`;
       }
-      if (key.includes('upd.')) {
-        return `\n${currenReplacer}- ${cut(key)}: ${insertValue(value[0])}\n${currenReplacer}+ ${cut(key)}: ${insertValue(value[1])}`;
+      if (element.status === 'updated') {
+        return `\n${currenReplacer}- ${element.name}: ${insertValue(element.oldValue, element)}\n${currenReplacer}+ ${element.name}: ${insertValue(element.value, element)}`;
       }
-      return `\n${currenReplacer}  ${key}: ${insertValue(value)}`;
+      if (element.status === 'modified') {
+        return `\n${currenReplacer}  ${element.name}: ${insertValue(element.value, element)}`;
+      }
+      if (element.status === 'unchanged') {
+        return `\n${currenReplacer}  ${element.name}: ${insertValue(element.value, element)}`;
+      }
+      throw new Error(`Error: something wrong in plain formatter - status ${element.status} unexpected in ${element.status}`);
     };
-
-    const pairs = Object.entries(data);
     const currentReplacer = replacer.repeat(spacesCount + depth * 2);
-    const result = pairs.reduce((acc, [key, value]) => `${acc}${format([key, value], currentReplacer)}`, '');
+    const result = data.reduce((acc, element) => `${acc}${format(element, currentReplacer)}`, '');
     return `{${result}\n${replacer.repeat(depth * 2)}}`;
   };
   return iter(dataIn, 0);

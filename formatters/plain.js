@@ -1,44 +1,40 @@
-const cut = (element) => element.substring(4, element.length);
-
-const checkValue = (value) => {
+const valueToString = (value) => {
   if (value === null) {
     return 'null';
   }
+  if (value === 'nested') {
+    return '[complex value]';
+  }
   if (typeof value === 'string') {
     return `'${value}'`;
-  }
-  if (typeof value === 'object') {
-    return '[complex value]';
   }
   return value;
 };
 
 const plain = (dataIn) => {
-  const iter = (data, depth) => {
-    const ifObject = (key, value) => {
-      if (typeof value === 'object' && !Array.isArray(value)) {
-        return `${iter(value, `${depth}${key}.`)}`;
+  const iter = (data, depth = '') => {
+    const format = (element) => {
+      if (element.status === 'added') {
+        return `\nProperty '${depth}${element.name}' was added with value: ${valueToString(element.value)}`;
       }
-      return '';
+      if (element.status === 'removed') {
+        return `\nProperty '${depth}${element.name}' was removed`;
+      }
+      if (element.status === 'updated') {
+        return `\nProperty '${depth}${element.name}' was updated. From ${valueToString(element.oldValue)} to ${valueToString(element.value)}`;
+      }
+      if (element.status === 'modified') {
+        return iter(element.children, `${depth}${element.name}.`);
+      }
+      if (element.status === 'unchanged') {
+        return '';
+      }
+      throw new Error(`Error: something wrong in plain formatter - status ${element.status} unexpected in ${element.status}`);
     };
-    const format = ([key, value]) => {
-      if (key.includes('add.')) {
-        return `\nProperty '${depth}${cut(key)}' was added with value: ${checkValue(value)}`;
-      }
-      if (key.includes('rem.')) {
-        return `\nProperty '${depth}${cut(key)}' was removed`;
-      }
-      if (key.includes('upd.')) {
-        return `\nProperty '${depth}${cut(key)}' was updated. From ${checkValue(value[0])} to ${checkValue(value[1])}`;
-      }
-      return ifObject(key, value);
-    };
-
-    const pairs = Object.entries(data);
-    const result = pairs.reduce((acc, [key, value]) => `${acc}${format([key, value])}`, '');
-    return `${result}`;
+    const result = data.reduce((acc, element) => `${acc}${format(element)}`, '');
+    return result;
   };
-  return iter(dataIn, '').trim();
+  return iter(dataIn).trim();
 };
 
 export default plain;
