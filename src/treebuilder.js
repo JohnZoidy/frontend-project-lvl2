@@ -3,7 +3,7 @@ import _ from 'lodash';
 const isObject = (object) => _.isObject(object) && !_.isNull(object);
 
 const makeNested = (val, isOld = false) => {
-  if (isObject(val)) {
+  if (_.isObject(val)) {
     const pairs = Object.entries(val);
     const nested = pairs.reduce((acc, [key, valueIn]) => [...acc, { name: key, status: 'unchanged', ...makeNested(valueIn) }], []);
     return isOld ? { oldValue: 'nested', children: nested } : { value: 'nested', children: nested };
