@@ -25,7 +25,7 @@ const makeDiffObject = (obj1, obj2) => {
         }];
       }
       return [...acc, {
-        name: key, status: 'updated', value: obj2[key], ...makeNested(obj1[key], true),
+        name: key, status: 'updated', ...makeNested(obj2[key]), ...makeNested(obj1[key], true),
       }];
     }
     if (!_.has(obj1, key) && _.has(obj2, key)) {
