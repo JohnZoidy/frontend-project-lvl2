@@ -2,22 +2,16 @@ import stylish from './stylish.js';
 import plain from './plain.js';
 import makeJson from './json.js';
 
-const pickFormatter = (data, formatterName) => {
+const makeFormattedData = (data, formatterName) => {
   switch (formatterName) {
     case 'stylish': {
-      const result = stylish(data);
-      console.log(result);
-      return result;
+      return stylish(data);
     }
     case 'plain': {
-      const result = plain(data);
-      console.log(result);
-      return result;
+      return plain(data);
     }
     case 'json': {
-      const result = makeJson(data);
-      console.log(result);
-      return result;
+      return makeJson(data);
     }
     default: {
       throw new Error('Error: there is no such formatter');
@@ -25,4 +19,4 @@ const pickFormatter = (data, formatterName) => {
   }
 };
 
-export default pickFormatter;
+export default makeFormattedData;

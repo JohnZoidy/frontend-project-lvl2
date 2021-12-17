@@ -12,7 +12,7 @@ program
   .option('-f, --format [type]', 'output format', 'stylish')
   .action((filepath1, filepath2, options) => {
     try {
-      genDiff(filepath1, filepath2, options.format);
+      console.log(genDiff(filepath1, filepath2, options.format));
     } catch (e) {
       console.error(e.message);
     }

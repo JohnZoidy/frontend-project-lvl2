@@ -13,25 +13,25 @@ const valueToString = (value) => {
 
 const plain = (dataIn) => {
   const iter = (data, depth = '') => {
-    const format = (element) => {
-      if (element.status === 'added') {
-        return `\nProperty '${depth}${element.name}' was added with value: ${valueToString(element.value)}`;
+    const format = (property) => {
+      if (property.status === 'added') {
+        return `\nProperty '${depth}${property.name}' was added with value: ${valueToString(property.value)}`;
       }
-      if (element.status === 'removed') {
-        return `\nProperty '${depth}${element.name}' was removed`;
+      if (property.status === 'removed') {
+        return `\nProperty '${depth}${property.name}' was removed`;
       }
-      if (element.status === 'updated') {
-        return `\nProperty '${depth}${element.name}' was updated. From ${valueToString(element.oldValue)} to ${valueToString(element.value)}`;
+      if (property.status === 'updated') {
+        return `\nProperty '${depth}${property.name}' was updated. From ${valueToString(property.oldValue)} to ${valueToString(property.value)}`;
       }
-      if (element.status === 'modified') {
-        return iter(element.children, `${depth}${element.name}.`);
+      if (property.status === 'modified') {
+        return iter(property.children, `${depth}${property.name}.`);
       }
-      if (element.status === 'unchanged') {
+      if (property.status === 'unchanged') {
         return '';
       }
-      throw new Error(`Error: something wrong in plain formatter - status ${element.status} unexpected in ${element.status}`);
+      throw new Error(`Error: something wrong in plain formatter - status ${property.status} unexpected in ${property.status}`);
     };
-    const result = data.reduce((acc, element) => `${acc}${format(element)}`, '');
+    const result = data.reduce((acc, property) => `${acc}${format(property)}`, '');
     return result;
   };
   return iter(dataIn).trim();

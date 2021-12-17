@@ -1,11 +1,11 @@
 import * as fs from 'fs';
 import yaml from 'js-yaml';
 
-const customParse = ([fullPath, format]) => {
-  if (format === 'yml') {
+const customParse = (fullPath, format) => {
+  if (format === '.yml' || format === '.yaml') {
     return yaml.load(fs.readFileSync(fullPath, 'utf8'));
   }
-  if (format === 'json') {
+  if (format === '.json') {
     return JSON.parse(fs.readFileSync(fullPath));
   }
   throw new Error('Error: unsupported format of file');
